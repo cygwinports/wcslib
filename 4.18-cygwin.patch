@@ -1,0 +1,16 @@
+--- origsrc/wcslib-4.18/configure.ac	2013-07-13 05:00:06.000000000 -0500
++++ src/wcslib-4.18/configure.ac	2013-08-29 03:42:07.105507100 -0500
+@@ -257,6 +257,13 @@ if test "x$ac_cv_c_compiler_gnu" = xyes
+       ;;
+     esac
+     ;;
++  cygwin*)
++    SONAME="cygwcs-$SHVER.dll"
++    SHRFLAGS="-DDLL_EXPORT"
++    SHRLIB=$SONAME
++    SHRLD="$SHRLD -shared"
++    SHRLN="libwcs.dll.a"
++    ;;
+   *)
+     # Covers Linux and Solaris at least.
+     SHRLIB="libwcs.so.$LIBVER"

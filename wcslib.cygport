@@ -1,0 +1,38 @@
+NAME="wcslib"
+VERSION=4.18
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="FITS World Coordinate System library"
+DESCRIPTION="The FITS World Coordinate System (WCS) standard defines keywords
+and usage that provide for the description of astronomical coordinate systems
+in a FITS image header."
+HOMEPAGE="http://www.atnf.csiro.au/people/mcalabre/WCS/"
+SRC_URI="ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${VERSION}.tar.bz2"
+PATCH_URI="4.18-cygwin.patch"
+
+PKG_NAMES="${NAME} libwcs4 libwcs-devel libwcs-doc"
+wcslib_CATEGORY="Science"
+wcslib_SUMMARY=${SUMMARY/library/utilities}
+wcslib_CONTENTS="usr/bin/*.exe usr/share/doc/${NAME}/[CNRT]* usr/share/man/man1/"
+libwcs4_CONTENTS="usr/bin/cygwcs-4.dll"
+libwcs_devel_REQUIRES="libwcs4"
+libwcs_devel_CONTENTS="usr/include/ usr/lib/"
+libwcs_doc_CATEGORY="Doc"
+libwcs_doc_CONTENTS="usr/share/doc/${NAME}/html/ usr/share/doc/${NAME}/*.pdf"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+	cd ${B}
+	cygconf
+	cygmake -j1
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	pushd ${D}/usr/lib/
+	mv *.dll ../bin/
+	ln -sf ../bin/$(readlink libwcs.dll.a) libwcs.dll.a
+}
